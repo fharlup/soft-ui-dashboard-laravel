@@ -7,6 +7,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ResetController;
 use App\Http\Controllers\SessionsController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SalesReportController;
 
 // Group routes that require authentication
 Route::group(['middleware' => 'auth'], function () {
@@ -85,5 +86,11 @@ Route::group(['middleware' => 'guest'], function () {
     Route::get('/login/forgot-password', [ResetController::class, 'create']);
     Route::post('/forgot-password', [ResetController::class, 'sendEmail']);
     Route::get('/reset-password/{token}', [ResetController::class, 'resetPass'])->name('password.reset');
-    Route::post('/reset-password', [ChangePasswordController::class, 'changePassword'])->name('password.update');
+    //Route::post('/reset-password', [ChangePasswordController::class, 'changePassword'])->name('password.update');
+   Route::middleware(['auth'])->group(function () {
+    Route::get('/sales-report', [SalesReportController::class, 'index'])->name('sales.report');
+    Route::get('/create', [SalesReportController::class, 'create'])->name('sales.create');
+    Route::post('/sales', [SalesReportController::class, 'store'])->name('sales.store');
+
+});
 });

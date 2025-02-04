@@ -14,7 +14,7 @@ class AttendanceController extends Controller
         if ($request->isMethod('get')) {
             // Handle GET request, tampilkan halaman absensi
             $users = User::all();  // Ambil semua pegawai
-            $attendances = Attendance::with('user')->latest()->get();  // Ambil riwayat absensi
+            $attendances = Attendance::with('user')->orderBy('clock_in', 'desc')->get(); // Mengurutkan berdasarkan clock_in
             return view('attendance', compact('users', 'attendances'));
         } elseif ($request->isMethod('post')) {
             // Handle POST request, simpan data absensi
@@ -25,9 +25,9 @@ class AttendanceController extends Controller
             // Menyimpan data absensi
             $attendance = new Attendance();
             $attendance->user_id = $validated['user_id'];
-            $attendance->clock_in = now(); 
-            
-            $attendance->created_at = now();  // Menyimpan waktu absen saat ini
+            $attendance->clock_in = now();  // Waktu clock_in otomatis terisi
+
+            // Tidak perlu menyetel created_at dan updated_at secara manual
             $attendance->save();
 
             return redirect()->route('absen')->with('success', 'Absensi berhasil!');

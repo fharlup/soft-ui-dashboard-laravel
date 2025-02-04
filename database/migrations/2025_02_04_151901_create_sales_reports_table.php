@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('sales_reports', function (Blueprint $table) {
             $table->id();
-                  $table->date('date')->unique();
-            $table->decimal('total_sales', 15, 2);
-            $table->timestamps();
+               $table->date('date');
+            $table->integer('amount');
+            $table->decimal('price', 10, 2); 
+        
         });
     }
 
