@@ -12,6 +12,6 @@ class SaleReport extends Model
 
     protected $table = 'sales'; // Sesuaikan dengan tabel yang menyimpan data penjualan
 
-    protected $fillable = ['date', 'total_sales'];
+    protected $fillable = ['date', 'total_sales','name'];
     
 }

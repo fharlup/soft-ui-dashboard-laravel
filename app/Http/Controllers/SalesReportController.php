@@ -2,42 +2,96 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\SalesReport;
-use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class SalesReportController extends Controller
 {
-    // Tampilkan laporan penjualan harian
+    // Show all sales reports
     public function index()
     {
-        $today = Carbon::today()->toDateString();
-        $sales = SalesReport::whereDate('date', $today)->get();
-
-        $totalSales = $sales->sum(function ($sale) {
-            return $sale->amount * $sale->price;
-        });
-
-        return view('report', compact('sales', 'totalSales', 'today')); 
+        // Retrieve all sales reports from the database
+        $salesReports = SalesReport::all();
+        
+        // Return the view with the sales reports, using the correct view path
+        return view('laravel-example.user-management', compact('salesReports'));
     }
 
-    // Menampilkan formulir tambah data penjualan
+    // Show the form to create a new sales report
     public function create()
     {
-        return view('create');
+        // Return the view for creating a sales report
+        return view('laravel-example.user-profile');
     }
 
-    // Simpan data penjualan baru
+    // Store the newly created sales report in the database
     public function store(Request $request)
     {
-        $request->validate([
+        // Validate the incoming request data
+        $validated = $request->validate([
             'date' => 'required|date',
-            'amount' => 'required|integer|min:1',
-            'price' => 'required|numeric|min:0',
+            'total_sales' => 'required|numeric',
+            'name' => 'required|string|max:255',
         ]);
 
-        SalesReport::create($request->all());
+        // Create a new sales report with the validated data
+        $salesReport = new SalesReport();
+        $salesReport->date = $validated['date'];
+        $salesReport->total_sales = $validated['total_sales'];
+        $salesReport->name = $validated['name'];
+        
+        // Save the sales report to the database
+        $salesReport->save();
 
-        return redirect()->route('sales.report')->with('success', 'Data penjualan berhasil ditambahkan.');
+        // Redirect to the sales report index page with a success message
+        return redirect()->route('sales-report.index')->with('success', 'Sales report created successfully!');
+    }
+
+    // Show the form to edit an existing sales report
+    public function edit($id)
+    {
+        // Retrieve the sales report by ID
+        $salesReport = SalesReport::findOrFail($id);
+        
+        // Return the edit view with the sales report data
+        return view('laravel-example.user-profile', compact('salesReport'));
+    }
+
+    // Update the specified sales report
+    public function update(Request $request, $id)
+    {
+        // Validate the incoming request data
+        $validated = $request->validate([
+            'date' => 'required|date',
+            'total_sales' => 'required|numeric',
+            'name' => 'required|string|max:255',
+        ]);
+
+        // Retrieve the sales report by ID
+        $salesReport = SalesReport::findOrFail($id);
+        
+        // Update the sales report with the validated data
+        $salesReport->date = $validated['date'];
+        $salesReport->total_sales = $validated['total_sales'];
+        $salesReport->name = $validated['name'];
+        
+        // Save the updated sales report to the database
+        $salesReport->save();
+
+        // Redirect to the sales report index page with a success message
+        return redirect()->route('sales-report.index')->with('success', 'Sales report updated successfully!');
+    }
+
+    // Delete a specified sales report
+    public function destroy($id)
+    {
+        // Retrieve the sales report by ID
+        $salesReport = SalesReport::findOrFail($id);
+        
+        // Delete the sales report
+        $salesReport->delete();
+
+        // Redirect to the sales report index page with a success message
+        return redirect()->route('sales-report.index')->with('success', 'Sales report deleted successfully!');
     }
 }

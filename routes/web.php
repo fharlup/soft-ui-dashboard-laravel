@@ -88,9 +88,7 @@ Route::group(['middleware' => 'guest'], function () {
     Route::get('/reset-password/{token}', [ResetController::class, 'resetPass'])->name('password.reset');
     //Route::post('/reset-password', [ChangePasswordController::class, 'changePassword'])->name('password.update');
    Route::middleware(['auth'])->group(function () {
-    Route::get('/sales-report', [SalesReportController::class, 'index'])->name('sales.report');
-    Route::get('/create', [SalesReportController::class, 'create'])->name('sales.create');
-    Route::post('/sales', [SalesReportController::class, 'store'])->name('sales.store');
+Route::resource('sales-report', SalesReportController::class);
 
 });
 });

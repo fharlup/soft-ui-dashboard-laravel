@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class SalesReport extends Model
 {
     use HasFactory;
-     protected $fillable = ['date', 'total_sales'];
+     protected $fillable = ['date', 'total_sales','name'];
 }
