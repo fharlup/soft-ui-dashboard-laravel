@@ -2,16 +2,15 @@
 
 @section('content')
 
-<h2>Sales Reports</h2>
-<a href="{{ route('sales-report.create') }}" class="btn btn-primary">Add New Report</a>
+<h2>Laporan Harian</h2>
+<a href="{{ route('sales-reports.create') }}" class="btn btn-primary">Tambah laporan</a>
 
 <table class="table">
     <thead>
         <tr>
-            <th>Date</th>
-            <th>Total Sales</th>
-            <th>Name</th>
-            <th>Actions</th>
+            <th>tangga</th>
+            <th>Total penjualan</th>
+            <th>nama</th>
         </tr>
     </thead>
     <tbody>
@@ -21,12 +20,6 @@
                 <td>{{ $report->total_sales }}</td>
                 <td>{{ $report->name }}</td>
                 <td>
-                    <a href="{{ route('sales-report.edit', $report->id) }}">Edit</a>
-                    <form action="{{ route('sales-report.destroy', $report->id) }}" method="POST" style="display:inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="btn btn-danger">Delete</button>
-                    </form>
                 </td>
             </tr>
         @endforeach
