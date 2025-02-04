@@ -14,37 +14,32 @@ class SalesReportController extends Controller
         $salesReports = SalesReport::all();
         
         // Return the view with the sales reports, using the correct view path
-        return view('laravel-example.user-management', compact('salesReports'));
+        return view('laravel-examples.user-management', compact('salesReports'));
     }
 
     // Show the form to create a new sales report
     public function create()
     {
         // Return the view for creating a sales report
-        return view('laravel-example.user-profile');
+        return view('laravel-examples.user-profile');
     }
 
     // Store the newly created sales report in the database
     public function store(Request $request)
     {
-        // Validate the incoming request data
         $validated = $request->validate([
             'date' => 'required|date',
             'total_sales' => 'required|numeric',
             'name' => 'required|string|max:255',
         ]);
 
-        // Create a new sales report with the validated data
         $salesReport = new SalesReport();
         $salesReport->date = $validated['date'];
         $salesReport->total_sales = $validated['total_sales'];
         $salesReport->name = $validated['name'];
-        
-        // Save the sales report to the database
         $salesReport->save();
 
-        // Redirect to the sales report index page with a success message
-        return redirect()->route('sales-report.index')->with('success', 'Sales report created successfully!');
+        return redirect()->route('sales-reports.index')->with('success', 'Sales report created successfully!');
     }
 
     // Show the form to edit an existing sales report

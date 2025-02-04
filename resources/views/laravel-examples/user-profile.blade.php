@@ -3,7 +3,7 @@
 @section('content')
 <h2>Create Sales Report</h2>
 
-<form action="{{ route('sales-report.store') }}" method="POST">
+<form action="{{ route('sales-reports.store') }}" method="POST">
     @csrf
     <div class="form-group">
         <label for="date">Date</label>

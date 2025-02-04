@@ -6,8 +6,12 @@ use App\Http\Controllers\InfoUserController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ResetController;
 use App\Http\Controllers\SessionsController;
+use App\Models\SalesReport;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SalesReportController;
+
+
+// Remove ->middleware('auth') if it's there
 
 // Group routes that require authentication
 Route::group(['middleware' => 'auth'], function () {
@@ -35,10 +39,13 @@ Route::group(['middleware' => 'auth'], function () {
         return view('rtl');
     })->name('rtl');
 
-    // Route for User Management
-    Route::get('user-management', function () {
-        return view('laravel-examples/user-management');
-    })->name('user-management');
+    // Sales Reports Routes probabky u will only use 3
+    Route::get('/sales-reports', [SalesReportController::class, 'index'])->name('sales-reports.index');
+    Route::get('/sales-reports/create', [SalesReportController::class, 'create'])->name('sales-reports.create');
+    Route::post('/sales-reports', [SalesReportController::class, 'store'])->name('sales-reports.store');
+    Route::get('/sales-reports/{id}/edit', [SalesReportController::class, 'edit'])->name('sales-reports.edit');
+    Route::put('/sales-reports/{id}', [SalesReportController::class, 'update'])->name('sales-reports.update');
+    Route::delete('/sales-reports/{id}', [SalesReportController::class, 'destroy'])->name('sales-reports.destroy');
 
     // Route for Tables
     Route::get('tables', function () {
@@ -87,8 +94,8 @@ Route::group(['middleware' => 'guest'], function () {
     Route::post('/forgot-password', [ResetController::class, 'sendEmail']);
     Route::get('/reset-password/{token}', [ResetController::class, 'resetPass'])->name('password.reset');
     //Route::post('/reset-password', [ChangePasswordController::class, 'changePassword'])->name('password.update');
-   Route::middleware(['auth'])->group(function () {
-Route::resource('sales-report', SalesReportController::class);
-
-});
+    Route::group(['middleware' => 'auth'], function () {
+        Route::resource('sales-report', SalesReportController::class); //sebenerny g kepake, cuma edit delete ntar error jika dihapus
+    });
+    
 });
